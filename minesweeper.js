@@ -153,19 +153,23 @@ var set_board = function() {
 $("div.span8").on("click", "button.btn", function(){
     var $this = $(this);
     var mine_count = [];
-    if ($this.hasClass("mine")){
-        $this.html('<i class="icon-certificate"></i>')
-        $(".span4 h1").text("Game Over!")
-    } else {var adjacents = valid_adjacents(parseInt(($this.attr("id"))));
-            for (var i = 0; i < adjacents.length; i++) {
-                if ($("#" + adjacents[i]).hasClass("mine")){
-                mine_count.push("+");
-            }
-            $this.text("" + mine_count.length);    
-            //$("#" + adjacents[i]).addClass("adjacent");
-            };
-    };
 
+    if ($this.hasClass("mine")){
+        $this.html('<i class="icon-certificate"></i>');
+        $(".span4 h1").text("Game Over!");
+    } else {
+        var adjacents = valid_adjacents(parseInt(($this.attr("id"))));
+        for (var i = 0; i < adjacents.length; i++) {
+            var $adjacent = $("#" + adjacents[i]);
+            if ($adjacent.hasClass("mine")){
+                mine_count.push("+");
+            };
+        $this.text("" + mine_count.length);
+        }
+
+        
+    };
+    
     $this.prop("disabled", true);
     
 });
