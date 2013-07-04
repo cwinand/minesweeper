@@ -41,6 +41,7 @@ var valid_adjacents = function(num){
     var row = check_row(num, matrix);
     var col = check_col(num, matrix);
     var adjacents = [];
+
     if (row === 0 && col === 0){
         adjacents.push(matrix[row][col+1], 
                        matrix[row+1][col], 
@@ -102,20 +103,28 @@ var valid_adjacents = function(num){
     return adjacents;
 };
 
+//randomizes the number to be set as the ID of a button
 var mine_locations = function(){
-    var locations = [];
+  var locations = [];
 
-    while(locations.length < 10){
-        var place = Math.floor(Math.random() * 64);
-        
-        if ($.inArray(place, locations) < 0){ //makes sure place IS NOT in locations array
-            locations.push(place);
-        };
+  while(locations.length < 10){
+    var place = Math.floor(Math.random() * 64);
+ 
+    if ($.inArray(place, locations) < 0){ //makes sure place IS NOT in locations array
+      locations.push(place);
+      };
     };
+
     return locations;
+};       
+
+var mine_adjs = function(mine_locations){
+  var mine_adj = {};
+  for(var i = 0; i < mine_locations.length; i++){
+    mine_adj[mine_locations[i]]= valid_adjacents(mine_locations[i])
+  }; 
+  return mine_adj
 };
-
-
 
 var set_board = function() {
     var gameboardDiv = $("div.span8");
@@ -125,6 +134,7 @@ var set_board = function() {
     $(gameboardDiv).append(table.addClass("gameboard"));
     $(table).append(tableBody);        
     
+    //creating table
     for(var i = 0; i < 8; i++){
         var tableRow = $(document.createElement("tr"));
         $(tableBody).append(tableRow);
@@ -134,43 +144,44 @@ var set_board = function() {
             var squareButton = $(document.createElement("button"));
             var button_loc = i * 8 + j;
             squareButton.addClass("btn btn-large")
-                        .attr("id", button_loc)        
-                        .html('<p>?</p>');
+                        .attr("id", button_loc);
 
             $(tableRow).append(square); 
             $(square).append(squareButton);
         };
     };
-
     var locs = mine_locations();
-
+    var thing = mine_adjs(locs);
+    console.log(thing);
     for(i = 0; i <= locs.length - 1; i++) {
         var createMine = $("button#" + locs[i]).addClass("mine");
-    }
+    };
 };
 
-
-$("div.span8").on("click", "button.btn", function(){
+$("div.span8").on("click", "button.btn", function(event){
     var $this = $(this);
     var mine_count = [];
+    console.log($this.attr("id"))
 
-    if ($this.hasClass("mine")){
+    if (event.shiftKey) {
+      $this.html("<i class='icon-flag'></i>");
+    } else if ($this.hasClass("mine")){
         $this.html('<i class="icon-certificate"></i>');
         $(".span4 h1").text("Game Over!");
+        $this.prop("disabled", true);
     } else {
-        var adjacents = valid_adjacents(parseInt(($this.attr("id"))));
+        var adjacents = valid_adjacents(parseInt($this.attr("id")));
         for (var i = 0; i < adjacents.length; i++) {
             var $adjacent = $("#" + adjacents[i]);
             if ($adjacent.hasClass("mine")){
                 mine_count.push("+");
             };
         $this.text("" + mine_count.length);
-        }
-
-        
+        $this.prop("disabled", true);
+        };   
     };
+
     
-    $this.prop("disabled", true);
     
 });
 
