@@ -134,7 +134,6 @@ var set_board = function() {
     $(gameboardDiv).append(table.addClass("gameboard"));
     $(table).append(tableBody);        
     
-    //creating table
     for(var i = 0; i < 8; i++){
         var tableRow = $(document.createElement("tr"));
         $(tableBody).append(tableRow);
@@ -151,8 +150,8 @@ var set_board = function() {
         };
     };
     var locs = mine_locations();
-    var thing = mine_adjs(locs);
-    console.log(thing);
+    var adjs = mine_adjs(locs);
+
     for(i = 0; i <= locs.length - 1; i++) {
         var createMine = $("button#" + locs[i]).addClass("mine");
     };
@@ -161,7 +160,6 @@ var set_board = function() {
 $("div.span8").on("click", "button.btn", function(event){
     var $this = $(this);
     var mine_count = [];
-    console.log($this.attr("id"))
 
     if (event.shiftKey) {
       $this.html("<i class='icon-flag'></i>");
@@ -169,16 +167,27 @@ $("div.span8").on("click", "button.btn", function(event){
         $this.html('<i class="icon-certificate"></i>');
         $(".span4 h1").text("Game Over!");
         $this.prop("disabled", true);
+        $(".mine").click();
     } else {
         var adjacents = valid_adjacents(parseInt($this.attr("id")));
+        
         for (var i = 0; i < adjacents.length; i++) {
-            var $adjacent = $("#" + adjacents[i]);
-            if ($adjacent.hasClass("mine")){
-                mine_count.push("+");
-            };
+          var $adjacent = $("#" + adjacents[i]);
+          if ($adjacent.hasClass("mine")){
+            mine_count.push("+");
+          }; 
+        };  
+
         $this.text("" + mine_count.length);
         $this.prop("disabled", true);
-        };   
+        
+        if ($this.text() == 0){
+          $this.text("");
+          for (var i = 0; i < adjacents.length; i++) {
+            var $adjacent = $("#" + adjacents[i]);
+            $adjacent.click();
+          };
+        };
     };
 
     
