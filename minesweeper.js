@@ -184,8 +184,8 @@ $("div.span8").on("click", "button.btn", function(event){
         if ($this.text() == 0){
           $this.text("");
           for (var i = 0; i < adjacents.length; i++) {
-            var $adjacent = $("#" + adjacents[i]);
-            $adjacent.click();
+            $("#" + adjacents[i]).click();
+            
           };
         };
     };
@@ -194,12 +194,16 @@ $("div.span8").on("click", "button.btn", function(event){
     
 });
 
-$("div.span4 > a.btn").on("click", function(){
+
+$("div.btn-group :nth-child(1)").on("click", function(){
     $(".gameboard").remove();
     $(".span4 h1").text("");
     set_board();
 });
 
+$("div.btn-group :nth-child(3)").on("click", function(){
+  $(".mine").css("border", "1px solid red");
+});
 
 
 set_board();
