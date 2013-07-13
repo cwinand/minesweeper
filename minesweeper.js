@@ -127,7 +127,7 @@ var mine_adjs = function(mine_locations){
 };
 
 var set_board = function() {
-    var gameboardDiv = $("div.span8");
+    var gameboardDiv = $("div.span7");
     var table = $(document.createElement("table"));
     var tableBody = $(document.createElement("tbody"));
     
@@ -157,28 +157,32 @@ var set_board = function() {
     };
 };
 
-$("div.span8").on("click", "button.btn", function(event){
+$("div.span7").on("click", "button.btn", function(event){
     var $this = $(this);
-    var mine_count = [];
+    var mine_count = 0;
+    var $mine = $(".mine");
 
     if (event.shiftKey) {
-      $this.html("<i class='icon-flag'></i>");
+      $this.html("<i class='icon-flag'></i>")
+           .addClass("flag");
     } else if ($this.hasClass("mine")){
-        $this.html('<i class="icon-certificate"></i>');
-        $(".span4 h1").text("Game Over!");
-        $this.prop("disabled", true);
-        $(".mine").click();
+      $(".mine.flag").css("color", "green");
+      $mine.not(".flag")
+           .html('<i class="icon-certificate"></i>')
+           .prop("disabled", true);
+        $(".span5 h1").text("Game Over!");
+
     } else {
         var adjacents = valid_adjacents(parseInt($this.attr("id")));
         
         for (var i = 0; i < adjacents.length; i++) {
           var $adjacent = $("#" + adjacents[i]);
           if ($adjacent.hasClass("mine")){
-            mine_count.push("+");
+            mine_count += 1;
           }; 
         };  
 
-        $this.text("" + mine_count.length);
+        $this.text("" + mine_count);
         $this.prop("disabled", true);
         
         if ($this.text() == 0){
@@ -196,13 +200,40 @@ $("div.span8").on("click", "button.btn", function(event){
 
 
 $("div.btn-group :nth-child(1)").on("click", function(){
-    $(".gameboard").remove();
-    $(".span4 h1").text("");
-    set_board();
+  $(".gameboard").remove();
+  $(".span5 h1").text("");
+  $("div.btn-group :nth-child(3)").removeClass("active");
+  set_board();
+});
+
+$("div.btn-group :nth-child(2)").on("click", function(){
+  var $mine = $(".mine");
+  var flagged = 0;
+
+  $mine.each(function(){
+    if($(this).hasClass("flag")){
+      flagged += 1;
+    };
+
+    if (flagged === 10){
+      $(".span5 h1").text("You Win!");
+    } else {
+      $(".span5 h1").text("Game Over!");
+      $(".mine.flag").css("color", "green");
+      $mine.not(".flag")
+           .html('<i class="icon-certificate"></i>')
+           .prop("disabled", true);
+      };
+  });
 });
 
 $("div.btn-group :nth-child(3)").on("click", function(){
-  $(".mine").css("border", "1px solid red");
+  if(!$(this).hasClass("active")){
+    $(".mine").css("border", "1px solid red");
+  }
+  else {
+    $(".mine").css("border", "");
+  };
 });
 
 
