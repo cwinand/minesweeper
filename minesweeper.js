@@ -11,7 +11,7 @@ var matrix = [[0, 1, 2, 3, 4, 5, 6, 7],
 
 var check_row = function(num, matrix) {
     for (var i = 0; i < matrix.length; i++) {
-        var check = matrix[i].indexOf(num)
+        var check = matrix[i].indexOf(num);
         if (check > -1){
             return i;
         }   
@@ -20,7 +20,7 @@ var check_row = function(num, matrix) {
 
 var check_col = function(num, matrix) {
     for (var i = 0; i < matrix.length; i++) {
-        var check = matrix[i].indexOf(num)
+        var check = matrix[i].indexOf(num);
         if (check > -1){
             return check;
         }
@@ -112,8 +112,8 @@ var mine_locations = function(){
  
     if ($.inArray(place, locations) < 0){ //makes sure place IS NOT in locations array
       locations.push(place);
-      };
-    };
+      }
+    }
 
     return locations;
 };       
@@ -121,9 +121,9 @@ var mine_locations = function(){
 var mine_adjs = function(mine_locations){
   var mine_adj = {};
   for(var i = 0; i < mine_locations.length; i++){
-    mine_adj[mine_locations[i]]= valid_adjacents(mine_locations[i])
-  }; 
-  return mine_adj
+    mine_adj[mine_locations[i]]= valid_adjacents(mine_locations[i]);
+  }
+  return mine_adj;
 };
 
 var set_board = function() {
@@ -147,14 +147,14 @@ var set_board = function() {
 
             $(tableRow).append(square); 
             $(square).append(squareButton);
-        };
-    };
+        }
+    }
     var locs = mine_locations();
     var adjs = mine_adjs(locs);
 
     for(i = 0; i <= locs.length - 1; i++) {
         var createMine = $("button#" + locs[i]).addClass("mine");
-    };
+    }
 };
 
 $("div.span7").on("click", "button.btn", function(event){
@@ -179,8 +179,8 @@ $("div.span7").on("click", "button.btn", function(event){
           var $adjacent = $("#" + adjacents[i]);
           if ($adjacent.hasClass("mine")){
             mine_count += 1;
-          }; 
-        };  
+          }
+        } 
 
         $this.text("" + mine_count);
         $this.prop("disabled", true);
@@ -190,12 +190,9 @@ $("div.span7").on("click", "button.btn", function(event){
           for (var i = 0; i < adjacents.length; i++) {
             $("#" + adjacents[i]).click();
             
-          };
-        };
-    };
-
-    
-    
+          }
+        }
+    }   
 });
 
 
@@ -213,7 +210,7 @@ $("div.btn-group :nth-child(2)").on("click", function(){
   $mine.each(function(){
     if($(this).hasClass("flag")){
       flagged += 1;
-    };
+    }
 
     if (flagged === 10){
       $(".span5 h1").text("You Win!");
@@ -223,7 +220,7 @@ $("div.btn-group :nth-child(2)").on("click", function(){
       $mine.not(".flag")
            .html('<i class="icon-certificate"></i>')
            .prop("disabled", true);
-      };
+      }
   });
 });
 
@@ -233,8 +230,7 @@ $("div.btn-group :nth-child(3)").on("click", function(){
   }
   else {
     $(".mine").css("border", "");
-  };
+  }
 });
-
 
 set_board();
